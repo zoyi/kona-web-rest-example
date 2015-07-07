@@ -1,11 +1,12 @@
 # kona-web-rest-example
 
+
 ```
 public class UserSessionExample {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
     HttpDelegate httpDelegate = new HttpDelegate();
-    int shopId = 319;
+    int shopId = 1;
 
     httpDelegate.signIn("email", "password");
 
