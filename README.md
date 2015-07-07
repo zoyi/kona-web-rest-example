@@ -1,5 +1,3 @@
-build in Intellij IDEA
-
 ## Setting up Intellij IDEA & gradle
 
 To develop your application via Intellij IDEA, you need to install the following pieces of software.
@@ -11,6 +9,7 @@ To develop your application via Intellij IDEA, you need to install the following
 - [org.apache.httpcomponents:httpclient:4.2.3](http://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient/4.2.3)
 - [org.json:json:20140107](http://mvnrepository.com/artifact/org.json/json/20140107)
 
+## Example Code
 ```
 public class UserSessionExample {
 
