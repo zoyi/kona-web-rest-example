@@ -31,12 +31,10 @@ public class HttpDelegate {
   private final String INSIGHTS_FUNNELS = "/shops/%d/insights/funnels";
   private final String INSIGHTS_VENDORS = "/shops/%d/insights/vendors";
 
-  private final String KONA_SESSION = "_kona_session";
-
   private DefaultHttpClient httpClient;
   private List<Cookie> cookies;
 
-  public List<Cookie> signIn(String email, String password) throws IOException {
+  public JSONObject signIn(String email, String password) throws IOException {
     HttpClient client = getHttpClient();
     HttpPost post = new HttpPost(API_URL + USER_SIGN_IN);
 
@@ -50,8 +48,7 @@ public class HttpDelegate {
     HttpResponse response = client.execute(post);
 
     setCookies(httpClient.getCookieStore().getCookies()); // Save Session
-
-    return httpClient.getCookieStore().getCookies();
+    return JSON.parse(response.getEntity().getContent());
   }
 
   public JSONObject insightsFunnels(Integer shopId, String from, String to, String unit) throws IOException, URISyntaxException {
@@ -80,6 +77,72 @@ public class HttpDelegate {
         .addParameter("to", to)
         .addParameter("unit", unit).build();
     HttpGet get = new HttpGet(uri);
+
+    HttpResponse response = client.execute(get);
+
+    return JSON.parse(response.getEntity().getContent());
+  }
+
+  // By Authentication token
+  public JSONObject insightsFunnelsByAuthTokenInUrl(Integer shopId, String from, String to, String unit, String email, String auth_token) throws IOException, URISyntaxException {
+    HttpClient client = getHttpClient();
+
+    URI uri = new URIBuilder(String.format(API_URL + INSIGHTS_FUNNELS, shopId))
+        .addParameter("from", from)
+        .addParameter("to", to)
+        .addParameter("unit", unit)
+        .addParameter("user_email", email)
+        .addParameter("user_token", auth_token).build();
+    HttpGet get = new HttpGet(uri);
+
+    HttpResponse response = client.execute(get);
+
+    return JSON.parse(response.getEntity().getContent());
+  }
+
+  public JSONObject insightsVendorsByAuthTokenInUrl(Integer shopId, String from, String to, String unit, String email, String auth_token) throws IOException, URISyntaxException {
+    HttpClient client = getHttpClient();
+
+    URI uri = new URIBuilder(String.format(API_URL + INSIGHTS_VENDORS, shopId))
+        .addParameter("from", from)
+        .addParameter("to", to)
+        .addParameter("unit", unit)
+        .addParameter("user_email", email)
+        .addParameter("user_token", auth_token).build();
+    HttpGet get = new HttpGet(uri);
+
+    HttpResponse response = client.execute(get);
+
+    return JSON.parse(response.getEntity().getContent());
+  }
+
+  public JSONObject insightsFunnelsByAuthTokenInHeader(Integer shopId, String from, String to, String unit, String email, String auth_token) throws IOException, URISyntaxException {
+    HttpClient client = getHttpClient();
+
+    URI uri = new URIBuilder(String.format(API_URL + INSIGHTS_FUNNELS, shopId))
+        .addParameter("from", from)
+        .addParameter("to", to)
+        .addParameter("unit", unit).build();
+    HttpGet get = new HttpGet(uri);
+    get.setHeader("X-User-Email", email);
+    get.setHeader("X-User-Token", auth_token);
+
+    HttpResponse response = client.execute(get);
+
+    return JSON.parse(response.getEntity().getContent());
+  }
+
+  public JSONObject insightsVendorsByAuthTokenInHeader(Integer shopId, String from, String to, String unit, String email, String auth_token) throws IOException, URISyntaxException {
+    BasicCookieStore cookieStore = new BasicCookieStore();
+    HttpClient client = getHttpClient();
+
+    URI uri = new URIBuilder(String.format(API_URL + INSIGHTS_VENDORS, shopId))
+        .addParameter("from", from)
+        .addParameter("to", to)
+        .addParameter("unit", unit).build();
+    HttpGet get = new HttpGet(uri);
+    get.setHeader("X-User-Email", email);
+    get.setHeader("X-User-Token", auth_token);
 
     HttpResponse response = client.execute(get);
 
