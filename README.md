@@ -10,7 +10,7 @@ To develop your application via Intellij IDEA, you need to install the following
 - [org.json:json:20140107](http://mvnrepository.com/artifact/org.json/json/20140107)
 
 ## Example Code
-```
+```java
 public class UserSessionExample {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
